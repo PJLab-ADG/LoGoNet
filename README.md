@@ -9,8 +9,9 @@
 ## News
 - 🔥(2023.2.28) LoGoNet has been accepted by CVPR 2023!
 - 🔥(2023.3) Our improved version, LoGoNet_Ens v2, ranks 1st leaderboard among all submissions. All the submission, please refer the [3D object detection leaderboard of Waymo Open Dataset](https://waymo.com/open/challenges/2020/3d-detection/) for more details.
-- (2022.10) Our LoGoNet ranks 1st in the term of mAPH (L2) on the Waymo leaderboard among all methods that don't use TTA and Ensemble. 
 - (2022.10) Our LoGoNet_Ens ranks 1st in the term of mAPH (L2) on the Waymo leaderboard among all methods with 81.02 mAPH (L2) and It is the first time for detection performance on three classes surpasses 80 APH (L2) simultaneously. 
+- (2022.10) Our LoGoNet ranks 1st in the term of mAPH (L2) on the Waymo leaderboard among all methods that don't use TTA and Ensemble. 
+
 
 ## Performances on Waymo with AP/APH (L2)
 |  Model   | VEH_L2 | PED_L2 | CYC_L2 |
