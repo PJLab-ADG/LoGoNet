@@ -1,7 +1,7 @@
 # LoGoNet
 
 ## Paper
-- **[CVPR2023] LoGoNet: Towards Accurate 3D Object Detection with Local-to-Global Cross-Modal Fusion.] (Coming soon)**
+- **[CVPR2023] LoGoNet: Towards Accurate 3D Object Detection with Local-to-Global Cross-Modal Fusion. (Coming soon)**
 
 ## Framework
 ![image](./docs/figs/logonet.png)
