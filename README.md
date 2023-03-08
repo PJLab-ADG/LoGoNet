@@ -1,7 +1,7 @@
 # LoGoNet
 
 ## Paper
-- **[CVPR2023] LoGoNet: Towards Accurate 3D Object Detection with Local-to-Global Cross-Modal Fusion. (Coming soon)**
+- **[CVPR2023] [LoGoNet: Towards Accurate 3D Object Detection with Local-to-Global Cross-Modal Fusion](https://arxiv.org/abs/2303.03595).**
 
 ## Framework
 ![image](./docs/figs/logonet.png)
@@ -39,5 +39,10 @@ We sincerely appreciate the following open-source projects for providing valuabl
 ## Reference
 If you find our paper useful, please kindly cite us via:
 ```
-
+@inproceedings{logonet,
+  title={LoGoNet: Towards Accurate 3D Object Detection with Local-to-Global Cross-Modal Fusion},
+  author={Xin Li and Tao Ma and Yuenan Hou and Botian Shi and Yucheng Yang and Youquan Liu and Xingjiao Wu and Qin Chen and Yikang Li and Yu Qiao and Liang He},
+  booktitle = {Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition (CVPR)},
+  year = {2023}
+}
 ```
