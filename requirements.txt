@@ -1,0 +1,14 @@
+numpy
+numba
+tensorboardX
+easydict
+pyyaml
+scikit-image
+tqdm
+opencv-python
+pandas
+tabulate
+SharedArray
+icecream
+kornia
+torch_scatter
