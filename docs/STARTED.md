@@ -5,7 +5,7 @@ and the model configs are located within [tools/cfgs/det_model_configs](../tools
 
 ## Dataset Preparation
 
-Currently we provide the dataloader of KITTI, NuScenes, Waymo.
+Currently we provide the dataloader of KITTI, Waymo.
 
 ### KITTI Dataset
 * Please download the official [KITTI 3D object detection](http://www.cvlibs.net/datasets/kitti/eval_object.php?obj_benchmark=3d) dataset and organize the downloaded files as follows (the road planes could be downloaded from [[road plane]](https://drive.google.com/file/d/1d5mq0RXRnvHPVeKx6Q612z0YRO1t2wAp/view?usp=sharing), which are optional for data augmentation in the training):
@@ -25,35 +25,7 @@ detection
 
 * Generate the data infos by running the following command: 
 ```python 
-python -m pcdet.datasets.kitti.kitti_dataset create_kitti_infos tools/cfgs/dataset_configs/kitti_dataset.yaml
-```
-
-### NuScenes Dataset
-* Please download the official [NuScenes 3D object detection dataset](https://www.nuscenes.org/download) and 
-organize the downloaded files as follows: 
-```
-detection
-├── data
-│   ├── nuscenes
-│   │   │── v1.0-trainval (or v1.0-mini if you use mini)
-│   │   │   │── samples
-│   │   │   │── sweeps
-│   │   │   │── maps
-│   │   │   │── v1.0-trainval  
-├── al3d_det
-├── tools
-```
-
-* Install the `nuscenes-devkit` with version `1.0.5` by running the following command: 
-```shell script
-pip install nuscenes-devkit==1.0.5
-```
-
-* Generate the data infos by running the following command (it may take several hours): 
-```python 
-python -m pcdet.datasets.nuscenes.nuscenes_dataset --func create_nuscenes_infos \
-    --cfg_file tools/cfgs/dataset_configs/nuscenes_dataset.yaml \
-    --version v1.0-trainval
+python -m al3d_det.datasets.kitti_dataset.kitti_dataset create_kitti_infos tools/cfgs/dataset_configs/kitti_dataset.yaml
 ```
 
 ### Waymo Open Dataset

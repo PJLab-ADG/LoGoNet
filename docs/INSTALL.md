@@ -28,13 +28,3 @@
   ```
   cd LoGoNet/detection/ops  && python setup.py develop
   ```
-- if you work on Lustre, please corelate cuda and gcc to your path:
-  ```
-  echo "export CC=/mnt/lustre/share/gcc/gcc-5.4/bin/gcc" >> ~/.bashrc
-  echo "export CXX=/mnt/lustre/share/gcc/gcc-5.4/bin/g++" >> ~/.bashrc
-  echo "export CUDA_HOME=/mnt/lustre/share/cuda-11.1/" >> ~/.bashrc
-  echo "export PATH=/mnt/lustre/share/gcc/gcc-5.4/bin:/mnt/lustre/share/cuda-11.1/bin:\$PATH" >> ~/.bashrc
-  echo "export LD_LIBRARY_PATH=/mnt/lustre/share/cuda-11.1/lib64/:/mnt/lustre/share/boost/lib/:\$LD_LIBRARY_PATH" >> ~/.bashrc
-  echo "export CPLUS_INCLUDE_PATH=/mnt/lustre/share/boost/include/:\$CPLUS_INCLUDE_PATH" >> ~/.bashrc
-  source ~/.bashrc
-  ```
