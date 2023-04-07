@@ -24,10 +24,6 @@ MANIFEST
 /detection/output_s2
 /detection/output_s2/
 /detection/ckpt/
-/detection/
-/utils/
-/detection
-/utils
 *.ipynb_checkpoints/
 *.vscode/
 *.idea/

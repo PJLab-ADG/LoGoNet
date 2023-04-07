@@ -1,0 +1,81 @@
+DATASET: 'KittiDataset'
+DATA_PATH: 'cluster2:s3://lixin/From_ST_SH1424_CephLX/kitti/'
+
+POINT_CLOUD_RANGE: [0, -40, -3, 70.4, 40, 1]
+
+DATA_SPLIT: {
+    'train': train,
+    'test': val
+}
+
+INFO_PATH: {
+    'train': [kitti_infos_train.pkl],
+    'test': [kitti_infos_val.pkl],
+}
+
+USE_IMAGE: True
+GET_ITEM_LIST: ["images", "points", "calib_matricies", "gt_boxes2d"]
+FOV_POINTS_ONLY: True
+
+DATA_AUGMENTOR:
+    DISABLE_AUG_LIST: ['placeholder']
+    AUG_CONFIG_LIST:
+        - NAME: gt_samplingkittimm
+          AUG_WITH_IMAGE: True # use PC-Image Aug
+          JOINT_SAMPLE: True # joint sample with point
+          KEEP_RAW: True # keep original PC
+          POINT_REFINE: True # refine points with different calib
+          BOX_IOU_THRES: 0.5
+          IMG_AUG_TYPE: by_order
+          AUG_USE_TYPE: annotation
+          IMG_ROOT_PATH: training/image_2
+          USE_ROAD_PLANE: True
+          DB_INFO_PATH:
+              - kitti_dbinfos_train.pkl
+          PREPARE: {
+             filter_by_min_points: ['Car:5', 'Pedestrian:5', 'Cyclist:5'],
+             filter_by_difficulty: [-1],
+          }
+
+          SAMPLE_GROUPS: ['Car:15','Pedestrian:10', 'Cyclist:10']
+          NUM_POINT_FEATURES: 4
+          DATABASE_WITH_FAKELIDAR: False
+          REMOVE_EXTRA_WIDTH: [0.0, 0.0, 0.0]
+          LIMIT_WHOLE_SCENE: True
+
+        - NAME: random_world_flip
+          ALONG_AXIS_LIST: ['x']
+          RETURN_NOISE_FLIP: True
+
+        - NAME: random_world_rotation
+          WORLD_ROT_ANGLE: [-0.78539816, 0.78539816]
+          RETURN_NOISE_ROTATE: True
+
+        - NAME: random_world_scaling
+          WORLD_SCALE_RANGE: [0.95, 1.05]
+          RETURN_NOISE_SCALE: True
+
+POINT_FEATURE_ENCODING: {
+    encoding_type: absolute_coordinates_encoding,
+    used_feature_list: ['x', 'y', 'z', 'intensity'],
+    src_feature_list: ['x', 'y', 'z', 'intensity'],
+}
+
+
+DATA_PROCESSOR:
+    - NAME: mask_points_and_boxes_outside_range
+      REMOVE_OUTSIDE_BOXES: True
+
+    - NAME: shuffle_points
+      SHUFFLE_ENABLED: {
+        'train': True,
+        'test': False
+      }
+
+    - NAME: transform_points_to_voxels
+      VOXEL_SIZE: [0.05, 0.05, 0.1]
+      MAX_POINTS_PER_VOXEL: 5
+      MAX_NUMBER_OF_VOXELS: {
+        'train': 16000,
+        'test': 40000
+      }

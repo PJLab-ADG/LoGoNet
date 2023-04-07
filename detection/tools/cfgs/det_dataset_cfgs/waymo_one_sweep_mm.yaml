@@ -1,0 +1,88 @@
+DATASET: 'WaymoTrainingDataset'
+DATA_PATH: '../data/waymo'
+OSS_PATH: 'cluster2:s3://dataset/waymo'
+PROCESSED_DATA_TAG: 'waymo_processed_data_v4'
+
+POINT_CLOUD_RANGE: [-75.2, -75.2, -2, 75.2, 75.2, 4]
+
+DATA_SPLIT: {
+    'train': train,
+    'test': val
+}
+
+SAMPLED_INTERVAL: {
+    'train': 1,
+    'test': 1
+}
+
+SWEEP_COUNT: [0, 0]
+TTA: False
+USE_IMAGE: True
+IMAGE_SCALE: 0.5
+
+DATA_AUGMENTOR:
+    DISABLE_AUG_LIST: ['placeholder', 'gt_sampling']
+    AUG_CONFIG_LIST:
+        - NAME: gt_sampling
+          USE_ROAD_PLANE: False
+          DB_INFO_PATH:
+              - waymo_dbinfos_train_sampled_1_sweep_1_v2.pkl
+          PREPARE: {
+             filter_by_min_points: ['Vehicle:5', 'Pedestrian:5', 'Cyclist:5'],
+             filter_by_difficulty: [-1],
+          }
+          NUM_POINT_FEATURES: 6
+          SAMPLE_GROUPS: ['Vehicle:15', 'Pedestrian:10', 'Cyclist:10']
+          REMOVE_EXTRA_WIDTH: [0.0, 0.0, 0.0]
+          LIMIT_WHOLE_SCENE: True
+
+        - NAME: random_world_flip
+          ALONG_AXIS_LIST: ['x', 'y']
+          RETURN_NOISE_FLIP: True
+
+        - NAME: random_world_rotation
+          WORLD_ROT_ANGLE: [-0.78539816, 0.78539816]
+          RETURN_NOISE_ROTATE: True
+
+        - NAME: random_world_scaling
+          WORLD_SCALE_RANGE: [0.95, 1.05]
+          RETURN_NOISE_SCALE: True
+
+        - NAME: random_world_translation
+          STD: 0.5
+          RETURN_NOISE_TRANSLATION: True
+
+POINT_FEATURE_ENCODING: {
+    encoding_type: absolute_coordinates_encoding,
+    used_feature_list: ['x', 'y', 'z', 'intensity', 'elongation'],
+    src_feature_list: ['x', 'y', 'z', 'intensity', 'elongation', 'offset'],
+}
+
+DATA_PROCESSOR:
+    - NAME: mask_points_and_boxes_outside_range
+      REMOVE_OUTSIDE_BOXES: True
+
+    - NAME: shuffle_points
+      SHUFFLE_ENABLED: {
+        'train': True,
+        'test': False
+      }
+
+    - NAME: transform_points_to_voxels
+      VOXEL_SIZE: [0.1, 0.1, 0.15]
+      MAX_POINTS_PER_VOXEL: 5
+      MAX_NUMBER_OF_VOXELS: {
+        'train': 150000,  # [origin] train=150000, test=200000
+        'test': 200000
+      }
+
+    - NAME: generate_voxel_coords
+      VOXEL_SIZE: [0.8, 0.8, 1.2]
+      MAX_POINTS_PER_VOXEL: 5
+      MAX_NUMBER_OF_VOXELS: {
+        'train': 150000,  # [origin] train=150000, test=200000
+        'test': 200000
+      }
+
+    - NAME: pad_image
+      TARGET_SHAPE: [960, 640]
