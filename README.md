@@ -9,7 +9,7 @@ This repo is the official implementation of: [LoGoNet: Towards Accurate 3D Objec
 ## News
 - :dart: [2023.04] Code released.
 - :saxophone: [2023.03] LoGoNet is released on [arXiv](https://arxiv.org/abs/2303.03595).
-- 🍻[2023.03] - Intend to test the robustness of your LiDAR semantic segmentation and detection models? Check our recent work, :robot: [Robo3D](https://github.com/ldkong1205/Robo3D), a comprehensive suite that enables OoD robustness evaluation of 3D segmentors and detectors on our newly established datasets: `SemanticKITTI-C`, `nuScenes-C`, and `WOD-C`.
+- 🍻[2023.03] Intend to test the robustness of your LiDAR semantic segmentation and detection models? Check our recent work, :robot: [Robo3D](https://github.com/ldkong1205/Robo3D), a comprehensive suite that enables OoD robustness evaluation of 3D segmentors and detectors on our newly established datasets: `SemanticKITTI-C`, `nuScenes-C`, and `WOD-C`.
 - 🔥[2023.02.28] LoGoNet has been accepted by CVPR 2023!
 - 🔥[2023.03] Our improved version, LoGoNet_Ens v2, ranks 1st leaderboard among all submissions. All the submission, please refer the [3D object detection leaderboard of Waymo Open Dataset](https://waymo.com/open/challenges/2020/3d-detection/) for more details.
 - [2022.10] Our LoGoNet_Ens ranks 1st in the term of mAPH (L2) on the Waymo leaderboard among all methods with 81.02 mAPH (L2) and It is the first time for detection performance on three classes surpasses 80 APH (L2) simultaneously. 
@@ -52,7 +52,7 @@ This repo is the official implementation of: [LoGoNet: Towards Accurate 3D Objec
 
 ## Main results
 ### Performances on Waymo with AP/APH (L2)
-*We report average metrics across all results. We provide training / validation configurations, pretrained models for all models in the paper. To access these pretrained models, please send us an email with your name, institute, a screenshot of the the Waymo dataset registration confirmation mail, and your intended usage. Please note that Waymo open dataset is under strict non-commercial license so we are not allowed to share the model with you if it will used for any profit-oriented activities. However, we can provide the logs. 
+We report average metrics across all results. We provide training / validation configurations, pretrained models for all models in the paper. To access these pretrained models, please send us an email with your name, institute, a screenshot of the the Waymo dataset registration confirmation mail, and your intended usage. Please note that Waymo open dataset is under strict non-commercial license so we are not allowed to share the model with you if it will used for any profit-oriented activities. However, we can provide the logs. 
 |  Model   | mAPH_L2 | VEH_L2 | PED_L2 | CYC_L2 | Log |
 |  :-------:  |  :----: |  :----:  |  :----:  |  :----: |  :----:  |
 | [LoGoNet-1frame  (val)](detection/tools/cfgs/det_model_cfgs/waymo/LoGoNet-1f.yaml) |  71.38 | 71.21/70.71 | 75.49/69.94 | 74.53/73.48| [log](https://drive.google.com/file/d/13oQETbn33902wy-fcq6qOj2dCM8UHmRT/view?usp=share_link)
@@ -64,7 +64,7 @@ This repo is the official implementation of: [LoGoNet: Towards Accurate 3D Objec
 
 
 ### Performances on KITTI with mAP
-*We report average metrics across all results. We provide training / validation configurations, pretrained models for all models in the paper.
+We report average metrics across all results. We provide training / validation configurations, pretrained models for all models in the paper.
 |  Model   | Car@40 | Ped@40 | Cyc@40| Log
 |  :----:  |  :----:  |  :----:  |:----:  |:----:  |
 | [LoGoNet (val)](detection/tools/cfgs/det_model_cfgs/kitti/LoGoNet-kitti.yaml) | 87.13 | 64.46 | 79.84| [log](https://drive.google.com/file/d/1QApkSbgFxwhKpIw7m7Mh3IZnla-_xmG9/view?usp=share_link) \| [weights](https://drive.google.com/file/d/1NMBi-s7bGMDMSslehdKU_GXpFEHE-5T5/view?usp=share_link)

@@ -26,5 +26,5 @@
   ```
 - compile the specific dcn module:
   ```
-  cd LoGoNet/detection/ops  && python setup.py develop
+  cd LoGoNet/detection/al3d_det/models/ops  && python setup.py develop
   ```

@@ -1,10 +1,9 @@
 import numpy as np
 import io
-from petrel_client.client import Client
-           
 
 def get_calib_from_file(calib_file):
     if 's3' in calib_file:
+        from petrel_client.client import Client
         client = Client('~/.petreloss.conf')
         lines = [x.decode().strip() for x in io.BytesIO(client.get(calib_file)).readlines()]
     else:
