@@ -21,15 +21,17 @@ class DatasetTemplate_KITTI(torch_data.Dataset):
         self.training = training
         self.class_names = class_names
         self.logger = logger
-        self.root_path = root_path if root_path is not None else self.dataset_cfg.DATA_PATH
+        self.root_path = root_path if root_path is not None else Path(self.dataset_cfg.DATA_PATH)
         self.logger = logger
         self.use_image = getattr(self.dataset_cfg, "USE_IMAGE", False)
         self.image_scale = getattr(self.dataset_cfg, "IMAGE_SCALE", 1)
         self.load_multi_images = getattr(self.dataset_cfg, "LOAD_MULTI_IMAGES", False)
+        self.ceph = False
         if self.dataset_cfg is None or class_names is None:
             return
         if getattr(self.dataset_cfg, 'OSS_PATH', None) is not None:
             self.root_path = self.dataset_cfg.OSS_PATH
+            self.ceph = True
         self.point_cloud_range = np.array(self.dataset_cfg.POINT_CLOUD_RANGE, dtype=np.float32)
         self.point_feature_encoder = PointFeatureEncoder(
             self.dataset_cfg.POINT_FEATURE_ENCODING,

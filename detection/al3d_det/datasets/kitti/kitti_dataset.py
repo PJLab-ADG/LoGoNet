@@ -26,12 +26,14 @@ class KittiDataset(DatasetTemplate_KITTI):
             dataset_cfg=dataset_cfg, class_names=class_names, training=training, root_path=root_path, logger=logger
         )
         self.split = self.dataset_cfg.DATA_SPLIT[self.mode]
-        if 's3' in self.root_path:
+
+            
+        if self.ceph:
             from petrel_client.client import Client
             self.client = Client('~/.petreloss.conf')
         self.split = self.dataset_cfg.DATA_SPLIT[self.mode]
         
-        if 's3' in self.root_path:
+        if self.ceph:
             split_dir = osp(self.root_path, 'ImageSets', self.split + '.txt')
             self.sample_id_list = [x.decode().strip() for x in io.BytesIO(self.client.get(split_dir)).readlines()]
             self.root_split_path = osp(self.root_path, ('training' if self.split != 'test' else 'testing'))
@@ -49,7 +51,7 @@ class KittiDataset(DatasetTemplate_KITTI):
         kitti_infos = []
 
         for info_path in self.dataset_cfg.INFO_PATH[mode]:
-            if 's3' in self.root_path:
+            if self.ceph:
                 info_path = osp(self.root_path, info_path)
                 infos = pickle.load(io.BytesIO(self.client.get(info_path))) 
             else:
@@ -76,7 +78,7 @@ class KittiDataset(DatasetTemplate_KITTI):
         self.sample_id_list = [x.strip() for x in open(split_dir).readlines()] if split_dir.exists() else None
 
     def get_lidar(self, idx):
-        if 's3' in self.root_split_path:
+        if self.ceph:
             lidar_file = osp(self.root_split_path, 'velodyne' , ('%s.bin' % idx))
             points = np.frombuffer(self.client.get(lidar_file), dtype=np.float32)
             return points.reshape(-1, 4)
@@ -96,7 +98,7 @@ class KittiDataset(DatasetTemplate_KITTI):
             image: (H, W, 3), RGB Image
         """
         
-        if 's3' in self.root_split_path:
+        if self.ceph:
             img_file = osp(self.root_split_path, 'image_2', ('%s.png' % idx))
             image = cv2.imdecode(np.frombuffer(memoryview(self.client.get(img_file)), np.uint8), cv2.IMREAD_COLOR)
         else:
@@ -108,7 +110,7 @@ class KittiDataset(DatasetTemplate_KITTI):
         return image
 
     def get_image_shape(self, idx):
-        if 's3' in self.root_split_path:
+        if self.ceph:
             img_file = osp(self.root_split_path, 'image_2', ('%s.png' % idx))
             image = cv2.imdecode(np.frombuffer(memoryview(self.client.get(img_file)), np.uint8), cv2.IMREAD_COLOR)
         else:
@@ -118,7 +120,7 @@ class KittiDataset(DatasetTemplate_KITTI):
         return np.array(image.shape[:2], dtype=np.int32)
 
     def get_label(self, idx):
-        if 's3' in self.root_split_path:
+        if self.ceph:
             label_file = osp(self.root_split_path, 'label_2', ('%s.txt' % idx))
             label_file = [x.decode().strip() for x in io.BytesIO(self.client.get(label_file)).readlines()]
         else:
@@ -134,7 +136,7 @@ class KittiDataset(DatasetTemplate_KITTI):
         Returns:
             depth: (H, W), Depth map
         """
-        if 's3' in self.root_split_path:
+        if self.ceph:
             depth_file = osp(self.root_split_path, 'depth_2', ('%s.png' % idx))
             depth = cv2.imdecode(np.frombuffer(memoryview(self.client.get(depth_file)), np.uint8), cv2.IMREAD_COLOR)
         else:
@@ -148,7 +150,7 @@ class KittiDataset(DatasetTemplate_KITTI):
         return depth
 
     def get_calib(self, idx):
-        if 's3' in self.root_split_path:
+        if self.ceph:
             calib_file = osp(self.root_split_path, 'calib', ('%s.txt' % idx))
         else:
             calib_file = self.root_split_path / 'calib' / ('%s.txt' % idx)
@@ -156,7 +158,7 @@ class KittiDataset(DatasetTemplate_KITTI):
         return calibration_kitti.Calibration(calib_file)
 
     def get_road_plane(self, idx):
-        if 's3' in self.root_split_path:
+        if self.ceph:
             plane_file = osp(self.root_split_path, 'planes', ('%s.txt' % idx))
             lines = [x.decode().strip() for x in io.BytesIO(self.client.get(plane_file)).readlines()]
         else:

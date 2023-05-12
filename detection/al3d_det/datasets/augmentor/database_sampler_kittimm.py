@@ -19,7 +19,7 @@ import io
 class DataBaseSamplerKITTIMM(object):
     def __init__(self, root_path, sampler_cfg, class_names, logger=None):
         self.root_path = root_path
-        if 's3' in self.root_path:
+        if self.ceph:
             from petrel_client.client import Client
             self.client = Client('~/.petreloss.conf')
         self.class_names = class_names
@@ -39,12 +39,14 @@ class DataBaseSamplerKITTIMM(object):
         self.use_shared_memory = sampler_cfg.get('USE_SHARED_MEMORY', False)
         
         for db_info_path in sampler_cfg.DB_INFO_PATH:
-            db_info_path = os.path.join(self.root_path, db_info_path)
-            if 's3' in db_info_path:
+            
+            if self.ceph:
+                db_info_path = os.path.join(self.root_path, db_info_path)
                 pkl_bytes = self.client.get(db_info_path )
                 infos = pickle.load(io.BytesIO(pkl_bytes))
                 [self.db_infos[cur_class].extend(infos[cur_class]) for cur_class in class_names]
             else:
+                db_info_path = self.root_path / db_info_path
                 with open(str(db_info_path), 'rb') as f:
                     infos = pickle.load(f)
                     [self.db_infos[cur_class].extend(infos[cur_class]) for cur_class in class_names]
@@ -266,7 +268,7 @@ class DataBaseSamplerKITTIMM(object):
                 obj_points = copy.deepcopy(gt_database_data[start_offset:end_offset])
             else:
                 file_path = os.path.join(self.root_path, info['path'])
-                if 's3' in file_path:
+                if self.ceph:
                     obj_points = np.frombuffer(self.client.get(str(file_path)), dtype=np.float32).reshape(
                     [-1, self.sampler_cfg.NUM_POINT_FEATURES]).copy()
                 else:
@@ -308,7 +310,7 @@ class DataBaseSamplerKITTIMM(object):
 
             # copy crops from images
             if self.aug_with_img:
-                if 's3' not in self.root_path:
+                if not self.ceph:
                     img_path = self.root_path / self.sampler_cfg.IMG_ROOT_PATH / (info['image_idx']+'.png')
                     raw_image = ioreadim.imread(img_path)
                 else:

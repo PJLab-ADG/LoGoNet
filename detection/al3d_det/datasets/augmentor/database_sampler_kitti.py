@@ -21,12 +21,12 @@ class DataBaseSamplerKITTI(object):
             self.db_infos[class_name] = []
             
         self.use_shared_memory = sampler_cfg.get('USE_SHARED_MEMORY', False)
-        if 's3' in self.root_path:
+        if self.ceph:
             from petrel_client.client import Client
             self.client = Client('~/.petreloss.conf')
 
         for db_info_path in sampler_cfg.DB_INFO_PATH:
-            if 's3' in self.root_path:
+            if self.ceph:
                 db_info_path = os.path.join(self.root_path, db_info_path)
                 
                 pkl_bytes = self.client.get(db_info_path)
@@ -188,7 +188,7 @@ class DataBaseSamplerKITTI(object):
                 obj_points = copy.deepcopy(gt_database_data[start_offset:end_offset])
             else:
                 
-                if 's3' in self.root_path:
+                if self.ceph:
                     file_path = os.path.join(self.root_path, info['path'])
                     obj_points = np.frombuffer(self.client.get(str(file_path)), dtype=np.float32).reshape(
                     [-1, self.sampler_cfg.NUM_POINT_FEATURES]).copy()
