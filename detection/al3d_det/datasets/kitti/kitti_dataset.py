@@ -30,11 +30,13 @@ class KittiDataset(DatasetTemplate_KITTI):
             from petrel_client.client import Client
             self.client = Client('~/.petreloss.conf')
         self.split = self.dataset_cfg.DATA_SPLIT[self.mode]
-        split_dir = osp(self.root_path, 'ImageSets', self.split + '.txt')
+        
         if 's3' in self.root_path:
+            split_dir = osp(self.root_path, 'ImageSets', self.split + '.txt')
             self.sample_id_list = [x.decode().strip() for x in io.BytesIO(self.client.get(split_dir)).readlines()]
             self.root_split_path = osp(self.root_path, ('training' if self.split != 'test' else 'testing'))
         else:
+            split_dir = self.root_path / 'ImageSets' / (self.split + '.txt')
             self.sample_id_list = [x.strip() for x in open(split_dir).readlines()] if split_dir.exists() else None
         
             self.root_split_path = self.root_path / ('training' if self.split != 'test' else 'testing')

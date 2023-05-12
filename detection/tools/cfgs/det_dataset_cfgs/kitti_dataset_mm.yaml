@@ -1,5 +1,5 @@
 DATASET: 'KittiDataset'
-DATA_PATH: 'cluster2:s3://lixin/From_ST_SH1424_CephLX/kitti/'
+DATA_PATH: '../data/kitti/'
 
 POINT_CLOUD_RANGE: [0, -40, -3, 70.4, 40, 1]
 
