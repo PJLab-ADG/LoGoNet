@@ -19,7 +19,7 @@ import io
 class DataBaseSamplerKITTIMM(object):
     def __init__(self, root_path, sampler_cfg, class_names, logger=None):
         self.root_path = root_path
-        if self.ceph:
+        if 's3' in str(self.root_path):
             from petrel_client.client import Client
             self.client = Client('~/.petreloss.conf')
         self.class_names = class_names
@@ -40,7 +40,7 @@ class DataBaseSamplerKITTIMM(object):
         
         for db_info_path in sampler_cfg.DB_INFO_PATH:
             
-            if self.ceph:
+            if 's3' in str(self.root_path):
                 db_info_path = os.path.join(self.root_path, db_info_path)
                 pkl_bytes = self.client.get(db_info_path )
                 infos = pickle.load(io.BytesIO(pkl_bytes))
@@ -268,7 +268,7 @@ class DataBaseSamplerKITTIMM(object):
                 obj_points = copy.deepcopy(gt_database_data[start_offset:end_offset])
             else:
                 file_path = os.path.join(self.root_path, info['path'])
-                if self.ceph:
+                if 's3' in str(self.root_path):
                     obj_points = np.frombuffer(self.client.get(str(file_path)), dtype=np.float32).reshape(
                     [-1, self.sampler_cfg.NUM_POINT_FEATURES]).copy()
                 else:
@@ -310,7 +310,7 @@ class DataBaseSamplerKITTIMM(object):
 
             # copy crops from images
             if self.aug_with_img:
-                if not self.ceph:
+                if not 's3' in str(self.root_path):
                     img_path = self.root_path / self.sampler_cfg.IMG_ROOT_PATH / (info['image_idx']+'.png')
                     raw_image = ioreadim.imread(img_path)
                 else:
