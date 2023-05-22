@@ -21,7 +21,7 @@ USE_IMAGE: True
 IMAGE_SCALE: 0.5
 
 DATA_AUGMENTOR:
-    DISABLE_AUG_LIST: ['placeholder']
+    DISABLE_AUG_LIST: ['placeholder', 'gt_sampling']
     AUG_CONFIG_LIST:
         - NAME: gt_sampling
           USE_ROAD_PLANE: False

@@ -7,7 +7,6 @@ MODEL:
     NAME: CenterPointMM
     SECOND_STAGE: True
     # remember to use "--pretrained_model" to load 1-stage checkpoint
-    # and use "--fix_pretrained_weights" to fix params
 
     VFE:
         NAME: DynamicMeanVFE

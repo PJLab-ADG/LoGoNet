@@ -17,11 +17,11 @@ SAMPLED_INTERVAL: {
 
 SWEEP_COUNT: [-4, 0]
 TTA: False
-USE_IMAGE: True
+USE_IMAGE: False
 IMAGE_SCALE: 0.5
 
 DATA_AUGMENTOR:
-    DISABLE_AUG_LIST: ['placeholder', 'gt_sampling']
+    DISABLE_AUG_LIST: ['placeholder']
     AUG_CONFIG_LIST:
         - NAME: gt_sampling
           USE_ROAD_PLANE: False
