@@ -188,16 +188,16 @@ def create_groundtruth_database(dataset, info_path, save_path, split='train', us
         difficulty = annos['difficulty']
         gt_boxes = annos['gt_boxes_lidar']
 
-        if dataset.use_image:
-            gt_boxes2d = {}
-            img_dict = dataset.get_images_and_params(k, target_idx_list)
-            for cam in img_dict['images'].keys():
-                gt_boxes2d[cam] = box_utils.boxes3d_to_boxes2d(
-                    gt_boxes,
-                    img_dict['extrinsic'][cam],
-                    img_dict['intrinsic'][cam],
-                    img_dict['image_shape'][cam]
-                )
+        # if dataset.use_image:
+        #     gt_boxes2d = {}
+        #     img_dict = dataset.get_images_and_params(k, target_idx_list)
+        #     for cam in img_dict['images'].keys():
+        #         gt_boxes2d[cam] = box_utils.boxes3d_to_boxes2d(
+        #             gt_boxes,
+        #             img_dict['extrinsic'][cam],
+        #             img_dict['intrinsic'][cam],
+        #             img_dict['image_shape'][cam]
+        #         )
 
         if k % 4 != 0 and len(names) > 0:
             mask = (names == 'Vehicle')
@@ -235,25 +235,25 @@ def create_groundtruth_database(dataset, info_path, save_path, split='train', us
             gt_points[:, :3] -= gt_boxes[i, :3]
 
             # get the largest patch for this object projected onto 5 cameras
-            if dataset.use_image:
-                largest_box2d = -1
-                largest_cam = ""
-                for cam in gt_boxes2d.keys():
-                    gt_box2d = gt_boxes2d[cam][i]
-                    box_area = (gt_box2d[2]-gt_box2d[0]) * (gt_box2d[3]-gt_box2d[1])
-                    if box_area > largest_box2d:
-                        largest_box2d = box_area
-                        largest_cam = cam
+            # if dataset.use_image:
+            #     largest_box2d = -1
+            #     largest_cam = ""
+            #     for cam in gt_boxes2d.keys():
+            #         gt_box2d = gt_boxes2d[cam][i]
+            #         box_area = (gt_box2d[2]-gt_box2d[0]) * (gt_box2d[3]-gt_box2d[1])
+            #         if box_area > largest_box2d:
+            #             largest_box2d = box_area
+            #             largest_cam = cam
                 
-                # get the image patch and saved path
-                img_name = '%s_%04d_%s_%d.png' % (sequence_name, sample_idx, names[i], i)
-                img_path = os.path.join(database_save_path, img_name)
-                box_crop = np.round(gt_boxes2d[largest_cam][i]).astype(np.int)
-                img_patch = img_dict['images'][largest_cam][0][
-                    box_crop[1]:box_crop[3],
-                    box_crop[0]:box_crop[2],
-                    :
-                ] * 255
+            #     # get the image patch and saved path
+            #     img_name = '%s_%04d_%s_%d.png' % (sequence_name, sample_idx, names[i], i)
+            #     img_path = os.path.join(database_save_path, img_name)
+            #     box_crop = np.round(gt_boxes2d[largest_cam][i]).astype(np.int)
+            #     img_patch = img_dict['images'][largest_cam][0][
+            #         box_crop[1]:box_crop[3],
+            #         box_crop[0]:box_crop[2],
+            #         :
+            #     ] * 255
 
             if (used_classes is None) or names[i] in used_classes:
                 if 's3' in filepath:
@@ -268,21 +268,21 @@ def create_groundtruth_database(dataset, info_path, save_path, split='train', us
                            'sample_idx': sample_idx, 'gt_idx': i, 'box3d_lidar': gt_boxes[i],
                            'num_points_in_gt': gt_points.shape[0], 'difficulty': difficulty[i]}
                 
-                if dataset.use_image:
-                    if 's3' in img_path:
-                        img_ext = os.path.splitext(img_path)[-1]
-                        _, img_buff = cv2.imencode(img_ext, img_patch)
-                        client.put(img_path, img_buff.tobytes(), update_cache=True)
-                        img_path = img_path.replace(dataset.root_path+'/', '')
-                    else:
-                        img_patch.save(img_path)
-                        img_path = str(img_path.relative_to(dataset.root_path))
+                # if dataset.use_image:
+                #     if 's3' in img_path:
+                #         img_ext = os.path.splitext(img_path)[-1]
+                #         _, img_buff = cv2.imencode(img_ext, img_patch)
+                #         client.put(img_path, img_buff.tobytes(), update_cache=True)
+                #         img_path = img_path.replace(dataset.root_path+'/', '')
+                #     else:
+                #         img_patch.save(img_path)
+                #         img_path = str(img_path.relative_to(dataset.root_path))
 
-                    db_info.update({
-                        'image_path': img_path,
-                        'box2d_img': gt_boxes2d,
-                        'cam_name': largest_cam
-                    })
+                #     db_info.update({
+                #         'image_path': img_path,
+                #         'box2d_img': gt_boxes2d,
+                #         'cam_name': largest_cam
+                #     })
 
                 if names[i] in all_db_infos:
                     all_db_infos[names[i]].append(db_info)
