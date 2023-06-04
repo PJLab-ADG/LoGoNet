@@ -104,7 +104,7 @@ class KittiDataset(DatasetTemplate_KITTI):
         else:
             img_file = self.root_split_path / 'image_2' / ('%s.png' % idx)
             assert img_file.exists()
-            image = skio.imread(img_file)
+            image = cv2.imread(img_file)
         image = image.astype(np.float32)
         image /= 255.0
         return image
